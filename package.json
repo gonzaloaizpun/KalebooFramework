@@ -1,0 +1,24 @@
+{
+  "name": "kaleboo",
+  "version": "1.0.0",
+  "description": "Listings and Models byId implemented by Async and exposed by Express",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonzaloaizpun/KalebooFramework.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gonzaloaizpun/KalebooFramework/issues"
+  },
+  "homepage": "https://github.com/gonzaloaizpun/KalebooFramework#readme",
+  "dependencies": {
+    "async": "^2.6.2",
+    "colors": "^1.3.3",
+    "mysql": "^2.16.0"
+  }
+}
