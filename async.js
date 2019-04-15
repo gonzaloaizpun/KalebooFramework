@@ -2,7 +2,7 @@
 
 var Async = require('async');
 var mysql = require('mysql');
-var KalebooError = require('./error.js');
+var KalebooError = require('./utilities/error.js');
 
 
 var main = function(model, relationships, extensions, db, id, callback) 

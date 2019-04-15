@@ -1,7 +1,8 @@
 "use strict";
 
 var Async 	 = require('async');
-var Database = require('./database.js');
+var Database = require('../utilities/database.js');
+
 var mysql 	 = null;
 
 

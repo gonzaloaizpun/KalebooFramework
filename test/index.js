@@ -19,33 +19,4 @@ var app = express();
 var Kaleboo	= require('../index.js');
 
 	Kaleboo.verbose(true);
-	Kaleboo.autodiscover(Config.Database, app);
-
-
-// Kaleboo Models and Routes
-// =========================
-// Kaleboo.model('devices').with('device_types');
-// Kaleboo.model('silobags').with('silobag_types').has('devices');
-// Kaleboo.model('measurements').with(['devices', 'metrics', 'units']);
-
-// Kaleboo.model('lots').has(['attributes', 'silobags']);
-// Kaleboo.model('countrysides').has(['attributes', 'lots']);
-// Kaleboo.model('organizations').has(['attributes', 'countrysides', 'owners', 'products']);
-// Kaleboo.model('users').has(['attributes', 'permissions']);
-
-// Kaleboo.model('metrics');
-// Kaleboo.model('units');
-// Kaleboo.model('attributes');
-// Kaleboo.model('device_types');
-// Kaleboo.model('permissions');
-// Kaleboo.model('products');
-// Kaleboo.model('silobag_types');
-
-
-// Kaleboo.routes(app);
-
-
-// Start Server!
-// =========================
-app.listen(Config.Server.Port, () => console.log('\n' + Config.Server.Message))
-
+	Kaleboo.automatically(Config.Database, Config.Server, app);

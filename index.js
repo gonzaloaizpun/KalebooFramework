@@ -1,8 +1,9 @@
 "use strict";
 
 var async        = require('./async.js');
-var Logger       = require('./logger.js');
-var Autodiscover = require('./autodiscover.js');
+var Logger       = require('./utilities/logger.js');
+var Autodiscover = require('./core/autodiscover.js');
+var Route        = require('./core/route.js');
 
 class Kaleboo
 {
@@ -15,20 +16,47 @@ class Kaleboo
         this.express = null;
 	}
 
-    autodiscover(db_config, express) 
+    automatically(db_config, server_config, express) 
     {
+        // keep the configs
     	this.db_config = db_config;
         this.express   = express;
 
+        // Run the Autodiscover
         var autodiscover = new Autodiscover(this.db_config, Logger);
-            autodiscover.run(function (error, results) {
-                console.log(results);
+            
+            autodiscover.run(function (error, results) 
+            {
+                // Great! Now we have Models and Routes as classes
+
+                // Assign the express routes
+                var dummyFunction = function (request, response) {
+                    response.send({ fullname : 'Jhon Doe' });
+                }
+
+                results.routes.forEach(function(model) 
+                {
+                    model.forEach(function(route) 
+                    {
+                        if (route.method == Route.http.get) {
+                            express.get(route.url, dummyFunction);
+                        } else if (route.method == Route.http.post) {
+                            express.post(route.url, dummyFunction);
+                        } else if (route.method == Route.http.put) {
+                            express.put(route.url, dummyFunction);
+                        } else if (route.method == Route.http.delete) {
+                            express.delete(route.url, dummyFunction);
+                        }
+                    });
+                });
+
+               express.listen(server_config.Port, () => Logger.serverStarted(server_config.Port));
             });
     }
 
     verbose(option) 
     {
-        Logger.Verbose(option);
+        Logger.enabled(option);
     }
 
     asyncHandle(model, relationships, extensions, db)
@@ -61,32 +89,6 @@ class Kaleboo
     		Logger.ExpressGetRoute(`/${this.models[i]}/:id`);
     	}
     }
-
-    model(model) 
-    {
-    	Logger.NewModel(model);
-        this.models.push(model);
-        return this;
-    }
-
-    with(models) 
-    {
-    	if (!Array.isArray(models)) {
-    		models = [models];
-    	}
-    	this.relationships[this.models[this.models.length -1]] = models;
-    	return this;
-    }
-
-    has(models) 
-    {
-    	if (!Array.isArray(models)) {
-    		models = [models];
-    	}
-    	this.extensions[this.models[this.models.length -1]] = models;
-    	return this;
-    }
-
 
 }
 
