@@ -1,5 +1,5 @@
 # Kaleboo Framework
-___
+
 
 *The way to get started is to quit talking and begin doing. (Walt Disney)*
 
@@ -14,35 +14,52 @@ Kaleboo Framework understands only `2 types` of MySQL tables structure.
 **TYPE A - Relantionships whitin 2 differentes models:**
 
 MySQL Table: `users`
+```
++----+---------------+------------------+
 | id | id_department | fullname         |
-| -  | -             | -                |
-| 1  |      3        | Jhon Doe         |
-| 2  |      3        | Alice Hanks      |
-| 3  |      1        | Ethan McDonald's |
++----+---------------+------------------+
+|  1 |             3 | Jhon Doe         |
+|  2 |             3 | Alice Hanks      |
+|  3 |             1 | Ethan McDonald's |
++----+---------------+------------------+
+```
+
 
 MySQL Table: `departments`
-| id | fullname         |
-| -  | -                |
-| 1  | Sales            |
-| 2  | IT               |
-| 3  | Legal            |
+```
++----+-----------+
+| id | fullname  |
++----+-----------+
+|  1 | Sales     |
+|  2 | IT        |
+|  3 | Legal     |
++----+-----------+
+```
 
 
 **TYPE B - Model Extensions:**
 
 MySQL Table: `device`
-| id | id_device | fullname         |
-| -  | -             | -                |
-| 1  |      3        | Testing Device         |
-| 2  |      3        | Alice's Device      |
-| 3  |      1        | Android S7 Device |
+```
++----+-----------+-------------------+
+| id | id_device | fullname          |
++----+-----------+-------------------+
+|  1 |         3 | Testing Device    |
+|  2 |         3 | Alice's Device    |
+|  3 |         1 | Android S7 Device |
++----+-----------+-------------------+
+```
 
 MySQL Table: `device_types`
-| id | id_device       | id_type    |
-| -  | -             | -                |
-| 1  |      1        | 3                |
-| 2  |      2        | 3                |
-| 3  |      3        | 1                |
+```
++----+-----------+---------+
+| id | id_device | id_type |
++----+-----------+---------+
+|  1 |         3 |       3 |
+|  2 |         3 |       3 |
+|  3 |         1 |       1 |
++----+-----------+---------+
+```
 
 ### Usage
 Install Kaleboo Framework
