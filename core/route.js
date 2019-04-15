@@ -10,10 +10,11 @@ const http = {
 
 class Route
 {
-	constructor(method, url) 
+	constructor(method, url, model) 
 	{
 		this.method = method;
 		this.url = url;
+		this.model = model;
 	}
 }
 

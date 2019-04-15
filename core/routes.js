@@ -38,29 +38,29 @@ class Routes
 	}
 
 		listing() {
-			return new Route(Route.http.get, `/${this.model.table}`);
+			return new Route(Route.http.get, `/${this.model.table}`, this.model);
 		}
 
 		byId() {
-			return new Route(Route.http.get, `/${this.model.table}/:id`);
+			return new Route(Route.http.get, `/${this.model.table}/:id`, this.model);
 		}
 
 		new() {
-			return new Route(Route.http.post, `/${this.model.table}`);
+			return new Route(Route.http.post, `/${this.model.table}`, this.model);
 		}
 
 		delete() {
-			return new Route(Route.http.delete, `/${this.model.table}/:id`);
+			return new Route(Route.http.delete, `/${this.model.table}/:id`, this.model);
 		}
 
 		modify() {
-			return new Route(Route.http.put, `/${this.model.table}/:id`);
+			return new Route(Route.http.put, `/${this.model.table}/:id`, this.model);
 		}
 
 		type(element) {
 			var prefix = this.model.table.slice(0, -1) + '_';
 				element = element.replace(prefix, '');
-			return new Route(Route.http.get, `/${this.model.table}/${element}`);
+			return new Route(Route.http.get, `/${this.model.table}/${element}`, this.model);
 		}
 }
 

@@ -1,9 +1,9 @@
 "use strict";
 
-var async        = require('../async.js');
 var Logger       = require('../utilities/logger.js');
 var Autodiscover = require('./autodiscover.js');
 var Route        = require('./route.js');
+var asyncGet     = require('../async/get.js');
 
 class Kaleboo
 {
@@ -22,30 +22,37 @@ class Kaleboo
     	this.db_config = db_config;
         this.express   = express;
 
+        var kaleboo = this;
+
         // Run the Autodiscover
         var autodiscover = new Autodiscover(this.db_config, Logger);
             
             autodiscover.run(function (error, results) 
             {
-                // Great! Now we have Models and Routes as classes
-
-                // Assign the express routes
-                var dummyFunction = function (request, response) {
-                    response.send({ fullname : 'Jhon Doe' });
-                }
-
-                results.routes.forEach(function(model) 
+                // Great! Now we have Models! and Routes! as classes
+                results.routes.forEach(function(routes) 
                 {
-                    model.forEach(function(route) 
+                    routes.forEach(function(route) 
                     {
-                        if (route.method == Route.http.get) {
-                            express.get(route.url, dummyFunction);
-                        } else if (route.method == Route.http.post) {
-                            express.post(route.url, dummyFunction);
-                        } else if (route.method == Route.http.put) {
-                            express.put(route.url, dummyFunction);
-                        } else if (route.method == Route.http.delete) {
-                            express.delete(route.url, dummyFunction);
+                        // Assign the express routes
+                        switch(route.method) 
+                        {
+                            case Route.http.get:
+
+                                express.get(route.url, kaleboo.getHandler(route, db_config));
+                                break;
+
+                            case Route.http.post:
+                                express.post(route.url, kaleboo.getHandler(route, db_config));
+                                break;
+
+                            case Route.http.put:
+                                express.put(route.url, kaleboo.getHandler(route, db_config));
+                                break;
+
+                            case Route.http.delete:
+                                express.delete(route.url, kaleboo.getHandler(route, db_config));
+                                break;
                         }
                     });
                 });
@@ -59,13 +66,13 @@ class Kaleboo
         Logger.enabled(option);
     }
 
-    asyncHandle(model, relationships, extensions, db)
+    getHandler(route, db_config)
     {
 	    return function(request, response, next) 
 	    {
 	    	let id = request.params.id || 0;
 
-	    	async(model, relationships, extensions, db, id, function(error, results) 
+	    	asyncGet(route, id, db_config, function(error, results) 
 	    	{
 	    		if (error != null) {
 	    			response.status(404).json({ message : error.message });
@@ -77,18 +84,6 @@ class Kaleboo
 	    	});
 	    };
 	}
-
-    routes(app)
-    {
-    	for (var i = 0; i < this.models.length; i++) 
-    	{
-    		app.get(`/${this.models[i]}`, this.asyncHandle(this.models[i], this.relationships[this.models[i]], this.extensions[this.models[i]], this.db_config));
-    		app.get(`/${this.models[i]}/:id`, this.asyncHandle(this.models[i], this.relationships[this.models[i]], this.extensions[this.models[i]], this.db_config));
-
-    		Logger.ExpressGetRoute(`/${this.models[i]}`);
-    		Logger.ExpressGetRoute(`/${this.models[i]}/:id`);
-    	}
-    }
 
 }
 
