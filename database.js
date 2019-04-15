@@ -1,15 +1,17 @@
 "use strict";
 
-var mysql      = require('mysql');
-var connection = mysql.createConnection(config);
+var mysql = require('mysql');
 
 class Database
 {
-	configuration : {},
+	constructor(db_config) {
+		this.db_config = db_config;
+	}
 	
 	query(query, fn) {
-		connection.query(query, fn);
+		var connection = mysql.createConnection(this.db_config);
+			connection.query(query, fn);
 	}
 }
 
-module.exports = new Database;
+module.exports = Database;

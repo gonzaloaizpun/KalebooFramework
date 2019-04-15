@@ -1,23 +1,34 @@
 "use strict";
 
-var mysql  = require('mysql');
-var async  = require('./async.js');
-var Logger = require('./logger.js');
+var async        = require('./async.js');
+var Logger       = require('./logger.js');
+var Autodiscover = require('./autodiscover.js');
 
 class Kaleboo
 {
-	constructor(db_config) 
+	constructor() 
 	{
-		Logger.Hello();
-
 		this.models = [];
 		this.relationships = {};
 		this.extensions = {};
 		this.db_config = null;
+        this.express = null;
 	}
 
-    database(config) {
-    	this.db_config = config;
+    autodiscover(db_config, express) 
+    {
+    	this.db_config = db_config;
+        this.express   = express;
+
+        var autodiscover = new Autodiscover(this.db_config, Logger);
+            autodiscover.run(function (error, results) {
+                console.log(results);
+            });
+    }
+
+    verbose(option) 
+    {
+        Logger.Verbose(option);
     }
 
     asyncHandle(model, relationships, extensions, db)
@@ -76,9 +87,7 @@ class Kaleboo
     	return this;
     }
 
-    verbose(option) {
-        Logger.Verbose(option);
-    }
+
 }
 
 
