@@ -8,7 +8,7 @@
 Kaleboo framework will automatically expose ExpressJs routes for Listings and Models items by their id's followed by responses generated with the Async Framework.
   
 ### Assumptions?
-Kaleboo Framework understands only `2 types` of MySQL tables structure.
+Kaleboo Framework understands `3 types` of MySQL tables structure.
 
 
 **TYPE A - Relantionships whitin 2 differentes models:**
@@ -61,51 +61,50 @@ MySQL Table: `device_types`
 +----+-----------+---------+
 ```
 
-### Usage
+### Example
 Install Kaleboo Framework
 ```sh
 $ npm i kaleboo
 ```
 
-Require the framework in your `application.js`
+Code your `application.js`
 ```js
-var Kaleboo = require('kaleboo');
-```
+"use strict";
 
-Verbose?
-```js
-Kaleboo.verbose(true);
-```
 
-Define your models.
-```js
-// Type A - Relationships whitin 2 models.
-Kaleboo.model('users').with(['departments']);
-// Type B - Relationships whitin 2 models. 
-Kaleboo.model('device').has(['types']); // ('types' instead of 'device_types')
-```
+// The MySQL and Express Configuration
 
-Set the MySQL configuration
-```js
-var config = {
-        host : 'localhost',
-        user : 'root',
-    password : 'mypassword',
-    database : 'yourproject'
+var Config = {
+  Server : {
+      Port    : 8000,
+      Message : `Kaleboo test application deployed.`
+  },
+  Database :  {
+          host : 'localhost',
+          user : 'myuser',
+      password : 'mypassword',
+      database : 'mydatabase'
+  }
 }
 
-Kaleboo.database(config);
-```
+// The Express application
 
-Set the the ExpressJs application in order to automatically make the routes
-```js
 var express = require('express');
+var bodyParser = require('body-parser');
 
 var app = express();
     app.use(bodyParser.json());
-    
-Kaleboo.routes(app);
+
+
+// The Kaleboo application
+
+var Kaleboo = require('kaleboo');
+
+    Kaleboo.verbose(true);
+    Kaleboo.automatically(Config.Database, Config.Server, app);
+
 ```
+
 
 If verbose is enabled, you will see the following output:
 ```
