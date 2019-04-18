@@ -1,0 +1,285 @@
+{
+  "front-version": "2.19.1",
+  "version": 3,
+  "nodes": [
+    {
+      "type": "Project",
+      "id": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa",
+      "lastModified": "2019-04-19T16:04:10.758-03:00",
+      "name": "Kaleboo"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 1,\n  \"id_unit\" : 3,\n  \"amount\" : 21\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/measurements"
+      },
+      "id": "f4c3e6ea-091a-4c3c-bb86-50c173e73e61",
+      "lastModified": "2019-04-19T16:03:40.455-03:00",
+      "name": "Create Measurements",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": ""
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations"
+      },
+      "id": "a65d2f13-70f5-4c4d-8e33-ad6a6e6da4d8",
+      "lastModified": "2019-04-19T16:02:37.857-03:00",
+      "name": "Create Organization",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+        "name": "DELETE"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 1,\n  \"id_unit\" : 3,\n  \"id_device\" : 1,\n  \"amount\" : 21\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/measurements/9"
+      },
+      "id": "69c73285-8e62-490e-843e-f7e3d99feb5a",
+      "lastModified": "2019-04-19T16:04:06.595-03:00",
+      "name": "Delete Measurement",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+        "name": "DELETE"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 1,\n  \"id_unit\" : 3,\n  \"id_device\" : 1,\n  \"amount\" : 21\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations/4"
+      },
+      "id": "29554908-928a-46b4-a870-0b1c692212f2",
+      "lastModified": "2019-04-19T16:04:10.759-03:00",
+      "name": "Delete Organization",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 1,\n  \"id_unit\" : 3,\n  \"id_device\" : 1,\n  \"amount\" : 21\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/measurements"
+      },
+      "id": "5b829521-444a-4361-a580-0e2bb04e01ec",
+      "lastModified": "2019-04-19T16:02:37.857-03:00",
+      "name": "Get Measurements",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.1",
+        "name": "GET"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 1,\n  \"id_unit\" : 3,\n  \"id_device\" : 1,\n  \"amount\" : 21\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations/1"
+      },
+      "id": "98729b46-fc43-446d-9aac-7279e36f6cc6",
+      "lastModified": "2019-04-19T16:02:37.857-03:00",
+      "name": "Get Organization (byId)",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.4",
+        "name": "PUT"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_metric\" : 3,\n  \"amount\" : 11.12\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/measurements/1"
+      },
+      "id": "db2b5bd3-7522-4f4c-9c7f-bfc723e9daff",
+      "lastModified": "2019-04-19T16:02:37.857-03:00",
+      "name": "Update Measurements (byId)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    }
+  ]
+}

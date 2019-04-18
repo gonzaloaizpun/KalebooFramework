@@ -2,7 +2,7 @@
 
 // App Modules
 // =========================
-var Config 		= require('./config.js');
+var Config = require('./config.js');
 
 
 // Express Application

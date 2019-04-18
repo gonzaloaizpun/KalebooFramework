@@ -10,6 +10,6 @@ module.exports =
 	        host : 'localhost',
 	        user : 'root',
 	    password : 'WwFFTRDJ7s2RgPWx',
-	    database : 'smartium'
+	    database : 'kaleboo'
 	}
 }
