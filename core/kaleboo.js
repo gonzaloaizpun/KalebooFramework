@@ -5,6 +5,7 @@ var Autodiscover = require('./autodiscover.js');
 var Route        = require('./route.js');
 var asyncGet     = require('../async/get.js');
 var asyncPost    = require('../async/post.js');
+var asyncDelete  = require('../async/delete.js');
 
 class Kaleboo
 {
@@ -52,7 +53,7 @@ class Kaleboo
                                 break;
 
                             case Route.http.delete:
-                                express.delete(route.url, kaleboo.getHandler(route, db_config));
+                                express.delete(route.url, kaleboo.deleteHandler(route, db_config));
                                 break;
                         }
                     });
@@ -91,6 +92,21 @@ class Kaleboo
         return function(request, response, next) 
         {
             asyncPost(route, db_config, request.body, function(error, results) 
+            {
+                if (error != null) {
+                    response.status(404).json({ message : error.message });
+                } else {
+                    response.send(results);
+                }
+            });
+        };
+    }
+
+    deleteHandler(route, db_config)
+    {
+        return function(request, response, next) 
+        {
+            asyncDelete(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
                     response.status(404).json({ message : error.message });
