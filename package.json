@@ -1,7 +1,7 @@
 {
   "name": "kaleboo",
-  "version": "1.1.0",
-  "description": "Listings and Models implemented by Async and exposed by Express",
+  "version": "1.2.0",
+  "description": "Kaleboo framework will automatically expose ExpressJs routes based on your MySQL structure and handle them for you.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,11 +10,19 @@
     "type": "git",
     "url": "git+https://github.com/gonzaloaizpun/KalebooFramework.git"
   },
-  "author": "",
+  "author": "Gonzalo Aizpún",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/gonzaloaizpun/KalebooFramework/issues"
   },
+  "keywords": [
+    "rest",
+    "routes",
+    "api",
+    "mysql",
+    "automatically",
+    "kaleboo"
+  ],
   "homepage": "https://github.com/gonzaloaizpun/KalebooFramework#readme",
   "dependencies": {
     "async": "^2.6.2",
