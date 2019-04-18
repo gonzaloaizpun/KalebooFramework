@@ -7,23 +7,33 @@ var KalebooError = require('../utilities/error.js');
 
 var main = function(route, id, db_config, callback) 
 {
-	// Mode? ById or List?
-	// ==============================================
-	let isList = (id == null || id == 0);
-
 	// Is it an integer?
 	// ==============================================
-	if (!isList && isNaN(id)) {
+	if (route.isById() && isNaN(id)) {
 		return end(callback, new KalebooError(`Mmm... it looks like ${id} is not an integer`), null);
 	}
 
-	// The Main and Basic Query
+	// The connection
 	// ==============================================
 	let connection 	= mysql.createConnection(db_config);
-	var query 		= `SELECT * FROM ${route.model.table}`;
 
-	if (!isList) {
+	// The Main and Basic Query for Listing and getById
+	// ==============================================
+	var query = `SELECT * FROM ${route.model.table}`;
+
+	if (route.isById()) {
 		query = query + ` WHERE id=${id}`;
+	}
+
+
+	// Modify the query when the request is looking for types instead of a model (ex. /users/roles)
+	// ==============================================
+	if (route.isByType()) 
+	{
+		let prefix = route.model.table.slice(0, -1);
+		let sufix  = route.url.substring(route.url.lastIndexOf('/') + 1);
+
+			query = `SELECT * FROM ${prefix}_${sufix}`;
 	}
 
 	// Get the main and basic data
@@ -41,10 +51,12 @@ var main = function(route, id, db_config, callback)
 		}
 
 		// Getting by id
-		if (isList) {
+		if (route.isByListing()) {
 			return listFunction(results, db_config, route, callback);
-		} else {
+		} else if (route.isById()) {
 			return classFunction(results[0], db_config, route, callback);
+		} else {
+			return end(callback, error, results);
 		}
 
 	});
