@@ -4,6 +4,7 @@ var Logger       = require('../utilities/logger.js');
 var Autodiscover = require('./autodiscover.js');
 var Route        = require('./route.js');
 var asyncGet     = require('../async/get.js');
+var asyncPost    = require('../async/post.js');
 
 class Kaleboo
 {
@@ -43,7 +44,7 @@ class Kaleboo
                                 break;
 
                             case Route.http.post:
-                                express.post(route.url, kaleboo.getHandler(route, db_config));
+                                express.post(route.url, kaleboo.postHandler(route, db_config));
                                 break;
 
                             case Route.http.put:
@@ -76,7 +77,7 @@ class Kaleboo
 	    	{
 	    		if (error != null) {
 	    			response.status(404).json({ message : error.message });
-	    		} else if (results.length == 1) {
+	    		} else if (results.length == 1 && !route.isByListing()) {
 					response.send(results[0]);
 	    		} else {
 	    			response.send(results);
@@ -84,6 +85,21 @@ class Kaleboo
 	    	});
 	    };
 	}
+
+    postHandler(route, db_config)
+    {
+        return function(request, response, next) 
+        {
+            asyncPost(route, db_config, request.body, function(error, results) 
+            {
+                if (error != null) {
+                    response.status(404).json({ message : error.message });
+                } else {
+                    response.send(results);
+                }
+            });
+        };
+    }
 
 }
 
