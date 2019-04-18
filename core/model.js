@@ -7,13 +7,16 @@ var mysql 	 = null;
 
 class Model
 {
-	constructor() {
+	constructor() 
+	{
 		this.db_config = null;
 		this.hasOne = null;
 		this.hasMany = null;
 		this.hasExternal = null;
+		this.filleable = null;
 		this.table = null;
 		this.logger = null;
+		this.deleteByDisable = false;
 	}
 
 	make(table, tables, db_config, logger, callback) 
@@ -26,38 +29,72 @@ class Model
 		var hasMany  = [];
 		var hasExternal = [];
 
-		// get the children: this will find all related tables (ex. 'users' > ['user_attributes'])
-		model.children(table, tables, function(error, children) 
+		model.attributes(table, db_config, function(error, attributes) 
 		{
-			// get extensions: this will understand if each related table is 1:1 or 1:N extension
-		    model.extensions(model, db_config, table, children, function(error, results) 
-		    {
-		    	hasOne  = results.hasOne;
-		    	hasMany = results.hasMany;
+			// get the children: this will find all related tables (ex. 'users' > ['user_attributes'])
+			model.children(table, tables, function(error, children) 
+			{
+				// get extensions: this will understand if each related table is 1:1 or 1:N extension
+			    model.extensions(model, db_config, table, children, function(error, results) 
+			    {
+			    	hasOne  = results.hasOne;
+			    	hasMany = results.hasMany;
 
-		    	// get relationships: this will get 1:1 external relationships (ex. 'users' > ['roles'])
-		    	model.relationships(db_config, table, function(error, items) 
-		    	{
-		    		hasExternal = items;
+			    	// get relationships: this will get 1:1 external relationships (ex. 'users' > ['roles'])
+			    	model.relationships(db_config, table, function(error, items) 
+			    	{
+			    		hasExternal = items;
 
-		    		// Finally
-					model.db_config = db_config;
-					model.hasOne = hasOne;
-					model.hasMany = hasMany;
-					model.hasExternal = hasExternal;
-					model.table = table;
-					model.logger = logger;
+			    		// Finally
+						model.db_config = db_config;
+						model.hasOne = hasOne;
+						model.hasMany = hasMany;
+						model.hasExternal = hasExternal;
+						model.table = table;
+						model.logger = logger;
+						model.filleable = attributes.list;
+						model.deleteByDisable = attributes.deleteByDisable;
 
-					// Debug
-		    		logger.model(table, hasOne, hasMany, hasExternal);
+						// Debug
+			    		logger.model(table, hasOne, hasMany, hasExternal);
 
-		    		// bye!
-		    		return model.end(callback, null, model);
-		    	});
-		    });
+			    		// bye!
+			    		return model.end(callback, null, model);
 
-		})
-	    
+			    	});	// end relationships
+
+			    }); // end extensions
+
+			}); // end children
+
+		}); // end attributes
+	}
+
+	attributes(table, db_config, callback)
+	{
+		var mysql = new Database(db_config);
+
+	    	mysql.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
+	    	{
+	    		var blacklist = ['id', 'created_at', 'updated_at', 'active'];
+	    		var list = [];
+	    		var deleteByDisable = false;
+
+	    		fields.forEach(function(field) 
+	    		{
+	    			// adding those not in blacklist
+	    			if (blacklist.indexOf(field.name) == -1) {
+	    				list.push(field.name);
+	    			}
+
+	    			// checking if 'active' attribute exists. In that case, deletion method will be by boolean.
+	    			if (field.name == 'active') {
+	    				deleteByDisable = true;
+	    			}
+	    		});
+
+	    		callback(null, { list : list, deleteByDisable : deleteByDisable });
+	    	});
 	}
 
 	children(table, tables, callback) 
