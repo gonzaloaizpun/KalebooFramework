@@ -11,7 +11,7 @@ var main = function(route, db_config, request, callback)
 
 	// Is it an integer?
 	// ==============================================
-	if (route.isById() && isNaN(id)) {
+	if ((route.isById() || route.isByExtension()) && isNaN(id)) {
 		return end(callback, new KalebooError(`Mmm... it looks like ${id} is not an integer`), null);
 	}
 
@@ -32,6 +32,17 @@ var main = function(route, db_config, request, callback)
 		let sufix  = route.url.substring(route.url.lastIndexOf('/') + 1);
 
 			query = `SELECT * FROM ${prefix}_${sufix}`;
+	}
+
+
+	// Modify the query when the request is looking for extensions instead of a model (ex. /users/1/attributes)
+	// ==============================================
+	if (route.isByExtension()) 
+	{
+		let prefix = route.model.table.slice(0, -1);
+		let sufix  = route.url.substring(route.url.lastIndexOf('/') + 1);
+
+			query = `SELECT * FROM ${prefix}_${sufix} WHERE id_${prefix} = ${id}`;
 	}
 
 	// Get the main and basic data
