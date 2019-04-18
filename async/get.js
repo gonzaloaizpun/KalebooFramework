@@ -5,17 +5,15 @@ var mysql = require('mysql');
 var KalebooError = require('../utilities/error.js');
 
 
-var main = function(route, id, db_config, callback) 
+var main = function(route, db_config, request, callback) 
 {
+	let id = request.params.id || 0;
+
 	// Is it an integer?
 	// ==============================================
 	if (route.isById() && isNaN(id)) {
 		return end(callback, new KalebooError(`Mmm... it looks like ${id} is not an integer`), null);
 	}
-
-	// The connection
-	// ==============================================
-	let connection 	= mysql.createConnection(db_config);
 
 	// The Main and Basic Query for Listing and getById
 	// ==============================================
@@ -38,7 +36,7 @@ var main = function(route, id, db_config, callback)
 
 	// Get the main and basic data
 	// ==============================================
-	connection.query(query, function(error, results) 
+	mysql.createConnection(db_config).query(query, function(error, results) 
 	{
 		// Exit if there is not any kind of relationship
 		// ==============================================
@@ -143,10 +141,9 @@ var main = function(route, id, db_config, callback)
 
 			var query = function(db_config, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
 			{
-				let connection 	= mysql.createConnection(db_config);
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
-				connection.query(query, function(error, results) {
+				mysql.createConnection(db_config).query(query, function(error, results) {
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {
@@ -158,10 +155,9 @@ var main = function(route, id, db_config, callback)
 
 			var extendedQuery = function(db_config, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
 			{
-				let connection 	= mysql.createConnection(db_config);
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
-				connection.query(query, function(error, results) {
+				mysql.createConnection(db_config).query(query, function(error, results) {
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {

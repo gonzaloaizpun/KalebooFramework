@@ -6,6 +6,7 @@ var Route        = require('./route.js');
 var asyncGet     = require('../async/get.js');
 var asyncPost    = require('../async/post.js');
 var asyncDelete  = require('../async/delete.js');
+var asyncPut     = require('../async/put.js');
 
 class Kaleboo
 {
@@ -49,7 +50,7 @@ class Kaleboo
                                 break;
 
                             case Route.http.put:
-                                express.put(route.url, kaleboo.getHandler(route, db_config));
+                                express.put(route.url, kaleboo.putHandler(route, db_config));
                                 break;
 
                             case Route.http.delete:
@@ -72,9 +73,7 @@ class Kaleboo
     {
 	    return function(request, response, next) 
 	    {
-	    	let id = request.params.id || 0;
-
-	    	asyncGet(route, id, db_config, function(error, results) 
+	    	asyncGet(route, db_config, request, function(error, results) 
 	    	{
 	    		if (error != null) {
 	    			response.status(404).json({ message : error.message });
@@ -91,7 +90,7 @@ class Kaleboo
     {
         return function(request, response, next) 
         {
-            asyncPost(route, db_config, request.body, function(error, results) 
+            asyncPost(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
                     response.status(404).json({ message : error.message });
@@ -107,6 +106,21 @@ class Kaleboo
         return function(request, response, next) 
         {
             asyncDelete(route, db_config, request, function(error, results) 
+            {
+                if (error != null) {
+                    response.status(404).json({ message : error.message });
+                } else {
+                    response.send(results);
+                }
+            });
+        };
+    }
+
+    putHandler(route, db_config)
+    {
+        return function(request, response, next) 
+        {
+            asyncPut(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
                     response.status(404).json({ message : error.message });
