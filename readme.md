@@ -278,4 +278,4 @@ Trying to find and assign expressJs routes...
 ```
 
 ### Example Files
-Please, visit [The Kaleboo Framework Example](https://github.com/gonzaloaizpun/KalebooFramework/tree/master/test) in order to look at our nodejs example, our dummy database dump and our restlet-client api calls file.
+Please, visit [The Kaleboo Framework Example](https://github.com/gonzaloaizpun/KalebooFramework/tree/master/test) in order to look at our `nodejs example`, our `dummy database dump` and our `restlet-client api calls file`.
