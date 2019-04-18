@@ -8,12 +8,13 @@ const http = {
 };
 
 const context = {
-       byId: 1,
-    listing: 2,
-       type: 3,
-        new: 4,
-     modify: 5,
-     delete: 6
+	     byId: 1,
+	  listing: 2,
+	     type: 3,
+	      new: 4,
+	   modify: 5,
+	   delete: 6,
+	extension: 7
 };
 
 
@@ -37,6 +38,10 @@ class Route
 
 	isByType() {
 		return this.type == context.type;
+	}
+
+	isByExtension() {
+		return this.type == context.extension;
 	}
 }
 

@@ -17,6 +17,7 @@ class Model
 		this.table = null;
 		this.logger = null;
 		this.deleteByDisable = false;
+		this.isEditable = false;
 	}
 
 	make(table, tables, db_config, logger, callback) 
@@ -54,6 +55,7 @@ class Model
 						model.logger = logger;
 						model.filleable = attributes.list;
 						model.deleteByDisable = attributes.deleteByDisable;
+						model.isEditable = attributes.isEditable;
 
 						// Debug
 			    		logger.model(table, hasOne, hasMany, hasExternal);
@@ -79,12 +81,23 @@ class Model
 	    		var blacklist = ['id', 'created_at', 'updated_at', 'active'];
 	    		var list = [];
 	    		var deleteByDisable = false;
+	    		var isEditable = false;
 
 	    		fields.forEach(function(field) 
 	    		{
 	    			// adding those not in blacklist
-	    			if (blacklist.indexOf(field.name) == -1) {
+	    			if (blacklist.indexOf(field.name) == -1) 
+	    			{
+	    				// Add
 	    				list.push(field.name);
+
+		    			// Checking if is it an editable attribute
+		    			// ref. https://dev.mysql.com/doc/internals/en/myisam-column-attributes.html
+		    			if (field.type == 253 || field.type == 15 || field.type == 246) {
+		    				isEditable = true;
+		    			} else if (field.type == 3 && field.name.indexOf('id_') == -1) {
+		    				isEditable = true;
+		    			}
 	    			}
 
 	    			// checking if 'active' attribute exists. In that case, deletion method will be by boolean.
@@ -93,7 +106,7 @@ class Model
 	    			}
 	    		});
 
-	    		callback(null, { list : list, deleteByDisable : deleteByDisable });
+	    		callback(null, { list: list, deleteByDisable: deleteByDisable, isEditable: isEditable });
 	    	});
 	}
 
