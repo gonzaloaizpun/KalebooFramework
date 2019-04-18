@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: kaleboo
 -- ------------------------------------------------------
--- Server version	5.7.25-0ubuntu0.16.04.2
+-- Server version 5.7.25-0ubuntu0.16.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -40,6 +40,83 @@ INSERT INTO `attributes` VALUES (1,'fullname'),(2,'avatar'),(3,'email'),(4,'pass
 UNLOCK TABLES;
 
 --
+-- Table structure for table `device_brands`
+--
+
+DROP TABLE IF EXISTS `device_brands`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device_brands` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(128) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `device_brands`
+--
+
+LOCK TABLES `device_brands` WRITE;
+/*!40000 ALTER TABLE `device_brands` DISABLE KEYS */;
+INSERT INTO `device_brands` VALUES (1,'Samsung','2019-04-18 22:17:00'),(2,'Motorola','2019-04-18 22:17:00'),(3,'Apple','2019-04-18 22:17:00');
+/*!40000 ALTER TABLE `device_brands` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `device_screensizes`
+--
+
+DROP TABLE IF EXISTS `device_screensizes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device_screensizes` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `description` varchar(128) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `device_screensizes`
+--
+
+LOCK TABLES `device_screensizes` WRITE;
+/*!40000 ALTER TABLE `device_screensizes` DISABLE KEYS */;
+INSERT INTO `device_screensizes` VALUES (1,'1440×2560','2019-04-18 22:17:00'),(2,'750×1334','2019-04-18 22:17:00'),(3,'720×1280','2019-04-18 22:17:00');
+/*!40000 ALTER TABLE `device_screensizes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `devices`
+--
+
+DROP TABLE IF EXISTS `devices`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `devices` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `id_device_brand` int(10) unsigned NOT NULL,
+  `id_device_screensize` int(10) unsigned NOT NULL,
+  `description` varchar(128) NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `devices`
+--
+
+LOCK TABLES `devices` WRITE;
+/*!40000 ALTER TABLE `devices` DISABLE KEYS */;
+INSERT INTO `devices` VALUES (1,1,2,'Samsung S7','2019-04-18 22:17:01'),(2,1,1,'Samsung S8','2019-04-18 22:17:01'),(3,1,1,'Samsung S9','2019-04-18 22:17:01'),(4,3,1,'iPhone 8','2019-04-18 22:17:01');
+/*!40000 ALTER TABLE `devices` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `measurements`
 --
 
@@ -62,7 +139,7 @@ CREATE TABLE `measurements` (
 
 LOCK TABLES `measurements` WRITE;
 /*!40000 ALTER TABLE `measurements` DISABLE KEYS */;
-INSERT INTO `measurements` VALUES (1,1,1,37.1200,'2019-04-18 21:53:01'),(2,1,1,36.2400,'2019-04-18 21:53:01'),(3,1,1,38.7100,'2019-04-18 21:53:01'),(4,1,1,35.2900,'2019-04-18 21:53:01'),(5,1,1,38.8100,'2019-04-18 21:53:01'),(6,1,1,37.4100,'2019-04-18 21:53:01'),(7,1,1,36.5600,'2019-04-18 21:53:01'),(8,1,1,37.0500,'2019-04-18 21:53:01');
+INSERT INTO `measurements` VALUES (1,1,1,37.1200,'2019-04-18 22:17:01'),(2,1,1,36.2400,'2019-04-18 22:17:01'),(3,1,1,38.7100,'2019-04-18 22:17:01'),(4,1,1,35.2900,'2019-04-18 22:17:01'),(5,1,1,38.8100,'2019-04-18 22:17:01'),(6,1,1,37.4100,'2019-04-18 22:17:01'),(7,1,1,36.5600,'2019-04-18 22:17:01'),(8,1,1,37.0500,'2019-04-18 22:17:01');
 /*!40000 ALTER TABLE `measurements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -117,7 +194,7 @@ CREATE TABLE `organization_attributes` (
 
 LOCK TABLES `organization_attributes` WRITE;
 /*!40000 ALTER TABLE `organization_attributes` DISABLE KEYS */;
-INSERT INTO `organization_attributes` VALUES (1,1,1,'Acme Corporation',1,'2019-04-18 21:53:01',NULL),(2,1,5,'20833 Stevens Creek Blvd, Cupertino, CA 95014, USA',1,'2019-04-18 21:53:01',NULL),(3,1,7,'+1 (408) 996-1010',1,'2019-04-18 21:53:01',NULL),(4,2,1,'Globex Corporation',1,'2019-04-18 21:53:01',NULL),(5,2,5,'20955 Alves Dr, Cupertino, CA 95014, USA',1,'2019-04-18 21:53:01',NULL),(6,2,7,'+1 (408) 725-3707',1,'2019-04-18 21:53:01',NULL),(7,3,1,'Soylent Corp',1,'2019-04-18 21:53:01',NULL),(8,3,5,'20999 Stevens Creek Fwy, Cupertino, CA 95014, USA',1,'2019-04-18 21:53:01',NULL),(9,3,7,'+1 (408) 257-6884',1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `organization_attributes` VALUES (1,1,1,'Acme Corporation',1,'2019-04-18 22:17:01',NULL),(2,1,5,'20833 Stevens Creek Blvd, Cupertino, CA 95014, USA',1,'2019-04-18 22:17:01',NULL),(3,1,7,'+1 (408) 996-1010',1,'2019-04-18 22:17:01',NULL),(4,2,1,'Globex Corporation',1,'2019-04-18 22:17:01',NULL),(5,2,5,'20955 Alves Dr, Cupertino, CA 95014, USA',1,'2019-04-18 22:17:01',NULL),(6,2,7,'+1 (408) 725-3707',1,'2019-04-18 22:17:01',NULL),(7,3,1,'Soylent Corp',1,'2019-04-18 22:17:01',NULL),(8,3,5,'20999 Stevens Creek Fwy, Cupertino, CA 95014, USA',1,'2019-04-18 22:17:01',NULL),(9,3,7,'+1 (408) 257-6884',1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `organization_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -148,7 +225,7 @@ CREATE TABLE `organization_products` (
 
 LOCK TABLES `organization_products` WRITE;
 /*!40000 ALTER TABLE `organization_products` DISABLE KEYS */;
-INSERT INTO `organization_products` VALUES (1,1,1,1,'2019-04-18 21:53:01',NULL),(2,1,2,1,'2019-04-18 21:53:01',NULL),(3,1,3,1,'2019-04-18 21:53:01',NULL),(4,2,1,1,'2019-04-18 21:53:01',NULL),(5,2,2,1,'2019-04-18 21:53:01',NULL),(6,3,1,1,'2019-04-18 21:53:01',NULL),(7,3,3,1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `organization_products` VALUES (1,1,1,1,'2019-04-18 22:17:01',NULL),(2,1,2,1,'2019-04-18 22:17:01',NULL),(3,1,3,1,'2019-04-18 22:17:01',NULL),(4,2,1,1,'2019-04-18 22:17:01',NULL),(5,2,2,1,'2019-04-18 22:17:01',NULL),(6,3,1,1,'2019-04-18 22:17:01',NULL),(7,3,3,1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `organization_products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -179,7 +256,7 @@ CREATE TABLE `organization_users` (
 
 LOCK TABLES `organization_users` WRITE;
 /*!40000 ALTER TABLE `organization_users` DISABLE KEYS */;
-INSERT INTO `organization_users` VALUES (1,1,1,1,'2019-04-18 21:53:01',NULL),(2,1,2,1,'2019-04-18 21:53:01',NULL),(3,1,3,1,'2019-04-18 21:53:01',NULL),(4,2,4,1,'2019-04-18 21:53:01',NULL),(5,2,5,1,'2019-04-18 21:53:01',NULL),(6,3,6,1,'2019-04-18 21:53:01',NULL),(7,3,7,1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `organization_users` VALUES (1,1,1,1,'2019-04-18 22:17:01',NULL),(2,1,2,1,'2019-04-18 22:17:01',NULL),(3,1,3,1,'2019-04-18 22:17:01',NULL),(4,2,4,1,'2019-04-18 22:17:01',NULL),(5,2,5,1,'2019-04-18 22:17:01',NULL),(6,3,6,1,'2019-04-18 22:17:01',NULL),(7,3,7,1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `organization_users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,7 +282,7 @@ CREATE TABLE `organizations` (
 
 LOCK TABLES `organizations` WRITE;
 /*!40000 ALTER TABLE `organizations` DISABLE KEYS */;
-INSERT INTO `organizations` VALUES (1,1,'2019-04-18 21:53:01',NULL),(2,1,'2019-04-18 21:53:01',NULL),(3,1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `organizations` VALUES (1,1,'2019-04-18 22:17:01',NULL),(2,1,'2019-04-18 22:17:01',NULL),(3,1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `organizations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -309,7 +386,7 @@ CREATE TABLE `user_attributes` (
 
 LOCK TABLES `user_attributes` WRITE;
 /*!40000 ALTER TABLE `user_attributes` DISABLE KEYS */;
-INSERT INTO `user_attributes` VALUES (1,1,1,'John Doe',1,'2019-04-18 21:53:01',NULL),(2,1,3,'john.doe@gmail.com',1,'2019-04-18 21:53:01',NULL),(3,1,4,'9959a1c23dcc98a7b3ca78dfd777d7ad',1,'2019-04-18 21:53:01',NULL),(4,2,1,'Mario Speedwagon',1,'2019-04-18 21:53:01',NULL),(5,2,3,'mario.speedwagon@gmail.com',1,'2019-04-18 21:53:01',NULL),(6,2,4,'fbbaad48686fa8f3a6e1d0c92b301da9',1,'2019-04-18 21:53:01',NULL),(7,3,1,'Anna Sthesia',1,'2019-04-18 21:53:01',NULL),(8,3,3,'anna.sthesia@gmail.com',1,'2019-04-18 21:53:01',NULL),(9,3,4,'433572aec18e8f74f4ddd2ba72b69144',1,'2019-04-18 21:53:01',NULL),(10,3,1,'Paul Molive',1,'2019-04-18 21:53:01',NULL),(11,3,3,'paul.molive@gmail.com',1,'2019-04-18 21:53:01',NULL),(12,3,4,'c4e3013d6faa2ebaf904a76140e7050e',1,'2019-04-18 21:53:01',NULL),(13,3,1,'Anna Mull',1,'2019-04-18 21:53:01',NULL),(14,3,3,'anna.mull@gmail.com',1,'2019-04-18 21:53:01',NULL),(15,3,4,'039ac5d5fb2ff5039e57a158a6080bed',1,'2019-04-18 21:53:01',NULL),(16,3,1,'Gail Forcewind',1,'2019-04-18 21:53:01',NULL),(17,3,3,'gail.forcewind@gmail.com',1,'2019-04-18 21:53:01',NULL),(18,3,4,'513a0fc87d6aa8625cc2b6b09a85563e',1,'2019-04-18 21:53:01',NULL),(19,3,1,'Paige Turner',1,'2019-04-18 21:53:01',NULL),(20,3,3,'paige.turner@gmail.com',1,'2019-04-18 21:53:01',NULL),(21,3,4,'b5bef18676056fea7f2e4b727bf8b91f',1,'2019-04-18 21:53:01',NULL),(22,3,1,'Bob Frapples',1,'2019-04-18 21:53:01',NULL),(23,3,3,'bob.frapples@gmail.com',1,'2019-04-18 21:53:01',NULL),(24,3,4,'4d1a3a7de62d988b6a0f00748c54c375',1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `user_attributes` VALUES (1,1,1,'John Doe',1,'2019-04-18 22:17:01',NULL),(2,1,3,'john.doe@gmail.com',1,'2019-04-18 22:17:01',NULL),(3,1,4,'9959a1c23dcc98a7b3ca78dfd777d7ad',1,'2019-04-18 22:17:01',NULL),(4,2,1,'Mario Speedwagon',1,'2019-04-18 22:17:01',NULL),(5,2,3,'mario.speedwagon@gmail.com',1,'2019-04-18 22:17:01',NULL),(6,2,4,'fbbaad48686fa8f3a6e1d0c92b301da9',1,'2019-04-18 22:17:01',NULL),(7,3,1,'Anna Sthesia',1,'2019-04-18 22:17:01',NULL),(8,3,3,'anna.sthesia@gmail.com',1,'2019-04-18 22:17:01',NULL),(9,3,4,'433572aec18e8f74f4ddd2ba72b69144',1,'2019-04-18 22:17:01',NULL),(10,3,1,'Paul Molive',1,'2019-04-18 22:17:01',NULL),(11,3,3,'paul.molive@gmail.com',1,'2019-04-18 22:17:01',NULL),(12,3,4,'c4e3013d6faa2ebaf904a76140e7050e',1,'2019-04-18 22:17:01',NULL),(13,3,1,'Anna Mull',1,'2019-04-18 22:17:01',NULL),(14,3,3,'anna.mull@gmail.com',1,'2019-04-18 22:17:01',NULL),(15,3,4,'039ac5d5fb2ff5039e57a158a6080bed',1,'2019-04-18 22:17:01',NULL),(16,3,1,'Gail Forcewind',1,'2019-04-18 22:17:01',NULL),(17,3,3,'gail.forcewind@gmail.com',1,'2019-04-18 22:17:01',NULL),(18,3,4,'513a0fc87d6aa8625cc2b6b09a85563e',1,'2019-04-18 22:17:01',NULL),(19,3,1,'Paige Turner',1,'2019-04-18 22:17:01',NULL),(20,3,3,'paige.turner@gmail.com',1,'2019-04-18 22:17:01',NULL),(21,3,4,'b5bef18676056fea7f2e4b727bf8b91f',1,'2019-04-18 22:17:01',NULL),(22,3,1,'Bob Frapples',1,'2019-04-18 22:17:01',NULL),(23,3,3,'bob.frapples@gmail.com',1,'2019-04-18 22:17:01',NULL),(24,3,4,'4d1a3a7de62d988b6a0f00748c54c375',1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `user_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -340,7 +417,7 @@ CREATE TABLE `user_permissions` (
 
 LOCK TABLES `user_permissions` WRITE;
 /*!40000 ALTER TABLE `user_permissions` DISABLE KEYS */;
-INSERT INTO `user_permissions` VALUES (1,1,1,1,'2019-04-18 21:53:01',NULL),(2,2,2,1,'2019-04-18 21:53:01',NULL),(3,3,3,1,'2019-04-18 21:53:01',NULL),(4,4,1,1,'2019-04-18 21:53:01',NULL),(5,5,3,1,'2019-04-18 21:53:01',NULL),(6,6,1,1,'2019-04-18 21:53:01',NULL),(7,7,3,1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `user_permissions` VALUES (1,1,1,1,'2019-04-18 22:17:01',NULL),(2,2,2,1,'2019-04-18 22:17:01',NULL),(3,3,3,1,'2019-04-18 22:17:01',NULL),(4,4,1,1,'2019-04-18 22:17:01',NULL),(5,5,3,1,'2019-04-18 22:17:01',NULL),(6,6,1,1,'2019-04-18 22:17:01',NULL),(7,7,3,1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `user_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -366,7 +443,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,1,'2019-04-18 21:53:01',NULL),(2,1,'2019-04-18 21:53:01',NULL),(3,1,'2019-04-18 21:53:01',NULL);
+INSERT INTO `users` VALUES (1,1,'2019-04-18 22:17:01',NULL),(2,1,'2019-04-18 22:17:01',NULL),(3,1,'2019-04-18 22:17:01',NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -379,4 +456,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-04-18 21:54:26
+-- Dump completed on 2019-04-18 22:18:27

@@ -16,7 +16,7 @@ var app = express();
 
 // Kaleboo
 // =========================	
-var Kaleboo	= require('../index.js');
+var Kaleboo	= require('../../index.js');
 
 	Kaleboo.verbose(true);
 	Kaleboo.automatically(Config.Database, Config.Server, app);
