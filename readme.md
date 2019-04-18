@@ -116,7 +116,7 @@ mysql> select * from devices;
 4 rows in set (0.01 sec)
 ```
 
-MySQL Table: `user_permissions`
+MySQL Table: `device_brands`
 ```
 mysql> select * from device_brands;
 +----+-------------+---------------------+
@@ -129,7 +129,7 @@ mysql> select * from device_brands;
 3 rows in set (0.00 sec)
 ```
 
-MySQL Table: `user_permissions`
+MySQL Table: `device_screensizes`
 ```
 mysql> select * from device_screensizes;
 +----+-------------+---------------------+
@@ -278,4 +278,4 @@ Trying to find and assign expressJs routes...
 ```
 
 ### Example Files
-Please, visit [Kaleboo Framework Test folder.](https://github.com/gonzaloaizpun/KalebooFramework/tree/master/test)
+Please, visit [The Kaleboo Framework Example](https://github.com/gonzaloaizpun/KalebooFramework/tree/master/test) in order to look at our nodejs example, our dummy database dump and our restlet-client api calls file.
