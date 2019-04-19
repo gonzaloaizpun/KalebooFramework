@@ -8,7 +8,6 @@ var validateId = require('./validations/id.js');
 
 var main = function(route, db_config, request, callback) 
 {
-
 	validateId(request, function(error, id) 
 	{
 		if (error) {
@@ -16,7 +15,6 @@ var main = function(route, db_config, request, callback)
 		}
 
 		var table = route.model.table;
-
 		if (route.isByExtension()) 
 		{
 			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
@@ -28,15 +26,16 @@ var main = function(route, db_config, request, callback)
 			// "organization_attributes"
 			table = `${prefix}_${sufix}`;
 		}
+		
 
-		mysql.createConnection(db_config).query(makeQuery(table, route.model.deleteByDisable, id), function(error, results) 
+		mysql.createConnection(db_config).query(makeQuery(table, request.body, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);
 			} else {
 				var result = {
-					message : `item ${id} removed from ${table}`,
-					     id : id,
+					message : `item ${results.insertId} updated in ${table}`,
+					     id : results.insertId,
 					  table : table
 				}
 				return end(callback, null, result);
@@ -48,13 +47,20 @@ var main = function(route, db_config, request, callback)
 }
 
 
-	var makeQuery = function(table, deleteByDisable, id) 
+	var makeQuery = function(table, body, id) 
 	{
-		if (deleteByDisable) {
-			return `UPDATE ${table} SET active = 0 WHERE id = ${id}`;
-		} else {
-			return `DELETE FROM ${table} WHERE id = ${id}`;
-		}
+		var keyvals = [];
+
+		Object.keys(body).forEach(function(key) 
+		{
+			var str = body[key];
+			if (isNaN(body[key])) {
+				str = body[key].replace(`"`, `\"`);
+			}
+			keyvals.push(`${key} = "${str}"`);
+		});
+
+		return `UPDATE ${table} SET ${keyvals.join()} WHERE id = ${id}`;
 	}
 
 

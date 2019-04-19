@@ -8,6 +8,7 @@ var asyncPost    = require('../async/post.js');
 var asyncDelete  = require('../async/delete.js');
 var asyncPut     = require('../async/put.js');
 var asyncPostExtension = require('../async/postExtension.js');
+var asyncPutExtension = require('../async/putExtension.js');
 
 class Kaleboo
 {
@@ -55,7 +56,12 @@ class Kaleboo
                                 break;
 
                             case Route.http.put:
-                                express.put(route.url, kaleboo.handler(route, db_config, asyncPut));
+                                if (route.isByExtension()) {
+                                    express.put(route.url, kaleboo.handler(route, db_config, asyncPutExtension));
+                                } else {
+                                    express.put(route.url, kaleboo.handler(route, db_config, asyncPut));
+                                }
+                                
                                 break;
 
                             case Route.http.delete:
