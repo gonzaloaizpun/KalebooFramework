@@ -15,15 +15,29 @@ var main = function(route, db_config, request, callback)
 			return end(callback, error, null);
 		}
 
-		mysql.createConnection(db_config).query(makeQuery(route, id), function(error, results) 
+		var table = route.model.table;
+
+		if (route.isByExtension()) 
+		{
+			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
+			let url = request.url.replace(`/${id}`, '');
+			//  "/organizations/1/attributes" to "organization"
+			let prefix = route.model.table.slice(0, -1);
+			//  "/organizations/1/attributes" to "attributes"
+			let sufix = url.substring(url.lastIndexOf("/") + 1);
+			// "organization_attributes"
+			var table = `${prefix}_${sufix}`;
+		}
+
+		mysql.createConnection(db_config).query(makeQuery(table, route.model.deleteByDisable, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);
 			} else {
 				var result = {
-					message : `item ${id} removed from ${route.model.table}`,
+					message : `item ${id} removed from ${table}`,
 					     id : id,
-					  table : route.model.table
+					  table : table
 				}
 				return end(callback, null, result);
 			}
@@ -31,18 +45,15 @@ var main = function(route, db_config, request, callback)
 		});
 
 	});
-
-
-
 }
 
 
-	var makeQuery = function(route, id) 
+	var makeQuery = function(table, deleteByDisable, id) 
 	{
-		if (route.model.deleteByDisable) {
-			return `UPDATE ${route.model.table} SET active = 0 WHERE id = ${id}`;
+		if (deleteByDisable) {
+			return `UPDATE ${table} SET active = 0 WHERE id = ${id}`;
 		} else {
-			return `DELETE FROM ${route.model.table} WHERE id = ${id}`;
+			return `DELETE FROM ${table} WHERE id = ${id}`;
 		}
 	}
 

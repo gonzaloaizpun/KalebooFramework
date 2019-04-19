@@ -91,7 +91,7 @@ class Routes
 			var url = `/${this.model.table}/:id/${element}`;
 
 			if (method == Route.http.delete || method == Route.http.put) {
-				url = `/${this.model.table}/:id/${element}/:id`;
+				url = `/${this.model.table}/:id/${element}/:id2`;
 			}
 
 			return new Route(method, url, this.model, Route.context.extension);
