@@ -17,17 +17,17 @@ class Logger
 	    if (Array.isArray(items) && items.length > 0) {
 	    	items.forEach(function(route) 
 	    	{
-	    		var method = 'GET';
+	    		var method = '   GET';
 
 	    		if (route.method == Route.http.post) {
-	    			method = 'POST';
+	    			method = '  POST';
 	    		} else if (route.method == Route.http.delete) {
 	    			method = 'DELETE';
 	    		} else if  (route.method == Route.http.put) {
-	    			method = 'PUT';
+	    			method = '   PUT';
 	    		}
 
-				logger.print(`\t✔ `.magenta + `${method} ` + route.url.magenta + ' created.');
+				logger.print(`\t✔   `.magenta + `${method}  ` + route.url.magenta + ' created.');
 	    	});
 	    }
 	}
