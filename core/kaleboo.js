@@ -43,23 +43,23 @@ class Kaleboo
                         {
                             case Route.http.get:
 
-                                express.get(route.url, kaleboo.getHandler(route, db_config));
+                                express.get(route.url, kaleboo.handler(route, db_config, asyncGet));
                                 break;
 
                             case Route.http.post:
                                 if (route.isByExtension()) {
-                                    express.post(route.url, kaleboo.postExtensionHandler(route, db_config));
+                                    express.post(route.url, kaleboo.handler(route, db_config, asyncPostExtension));
                                 } else {
-                                    express.post(route.url, kaleboo.postHandler(route, db_config));
+                                    express.post(route.url, kaleboo.handler(route, db_config, asyncPost));
                                 }
                                 break;
 
                             case Route.http.put:
-                                express.put(route.url, kaleboo.putHandler(route, db_config));
+                                express.put(route.url, kaleboo.handler(route, db_config, asyncPut));
                                 break;
 
                             case Route.http.delete:
-                                express.delete(route.url, kaleboo.deleteHandler(route, db_config));
+                                express.delete(route.url, kaleboo.handler(route, db_config, asyncDelete));
                                 break;
                         }
                     });
@@ -69,81 +69,20 @@ class Kaleboo
             });
     }
 
-    verbose(option) 
-    {
+    verbose(option) {
         Logger.enabled(option);
     }
 
-    getHandler(route, db_config)
-    {
-	    return function(request, response, next) 
-	    {
-	    	asyncGet(route, db_config, request, function(error, results) 
-	    	{
-	    		if (error != null) {
-	    			response.status(404).json({ message : error.message });
-	    		} else if (results.length == 1 && !route.isByListing()) {
-					response.send(results[0]);
-	    		} else {
-	    			response.send(results);
-	    		}
-	    	});
-	    };
-	}
-
-    postHandler(route, db_config)
+    handler(route, db_config, action)
     {
         return function(request, response, next) 
         {
-            asyncPost(route, db_config, request, function(error, results) 
+            action(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
                     response.status(404).json({ message : error.message });
-                } else {
-                    response.send(results);
-                }
-            });
-        };
-    }
-
-    postExtensionHandler(route, db_config)
-    {
-        return function(request, response, next) 
-        {
-            asyncPostExtension(route, db_config, request, function(error, results) 
-            {
-                if (error != null) {
-                    response.status(404).json({ message : error.message });
-                } else {
-                    response.send(results);
-                }
-            });
-        };
-    }
-
-    deleteHandler(route, db_config)
-    {
-        return function(request, response, next) 
-        {
-            asyncDelete(route, db_config, request, function(error, results) 
-            {
-                if (error != null) {
-                    response.status(404).json({ message : error.message });
-                } else {
-                    response.send(results);
-                }
-            });
-        };
-    }
-
-    putHandler(route, db_config)
-    {
-        return function(request, response, next) 
-        {
-            asyncPut(route, db_config, request, function(error, results) 
-            {
-                if (error != null) {
-                    response.status(404).json({ message : error.message });
+                } else if (results.length == 1 && !route.isByListing()) {
+                    response.send(results[0]);
                 } else {
                     response.send(results);
                 }
