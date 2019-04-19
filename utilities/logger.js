@@ -10,6 +10,20 @@ class Logger
 		this.verbose = false;
 	}
 
+	request(request, route)
+	{
+		var method = '   GET';
+
+		if (route.method == Route.http.post) {
+			method = '  POST';
+		} else if (route.method == Route.http.delete) {
+			method = 'DELETE';
+		} else if  (route.method == Route.http.put) {
+			method = '   PUT';
+		}
+		this.print(`${method}  `.yellow + request.url);
+	}
+
 	routes(items) 
 	{
 		var logger = this;

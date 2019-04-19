@@ -83,6 +83,8 @@ class Kaleboo
     {
         return function(request, response, next) 
         {
+            Logger.request(request, route);
+
             action(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
