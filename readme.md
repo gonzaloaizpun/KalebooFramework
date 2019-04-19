@@ -225,53 +225,76 @@ Trying to find models from mysql...
 
 Trying to find and assign expressJs routes...
 
-  ✔ GET /attributes created.
-  ✔ GET /attributes/:id created.
-  ✔ POST /attributes created.
-  ✔ DELETE /attributes/:id created.
-  ✔ PUT /attributes/:id created.
-  ✔ GET /devices/brands created.
-  ✔ GET /devices/screensizes created.
-  ✔ GET /devices created.
-  ✔ GET /devices/:id created.
-  ✔ POST /devices created.
-  ✔ DELETE /devices/:id created.
-  ✔ PUT /devices/:id created.
-  ✔ GET /measurements created.
-  ✔ GET /measurements/:id created.
-  ✔ POST /measurements created.
-  ✔ DELETE /measurements/:id created.
-  ✔ PUT /measurements/:id created.
-  ✔ GET /metrics created.
-  ✔ GET /metrics/:id created.
-  ✔ POST /metrics created.
-  ✔ DELETE /metrics/:id created.
-  ✔ PUT /metrics/:id created.
-  ✔ GET /organizations created.
-  ✔ GET /organizations/:id created.
-  ✔ POST /organizations created.
-  ✔ DELETE /organizations/:id created.
-  ✔ PUT /organizations/:id created.
-  ✔ GET /permissions created.
-  ✔ GET /permissions/:id created.
-  ✔ POST /permissions created.
-  ✔ DELETE /permissions/:id created.
-  ✔ PUT /permissions/:id created.
-  ✔ GET /products created.
-  ✔ GET /products/:id created.
-  ✔ POST /products created.
-  ✔ DELETE /products/:id created.
-  ✔ PUT /products/:id created.
-  ✔ GET /units created.
-  ✔ GET /units/:id created.
-  ✔ POST /units created.
-  ✔ DELETE /units/:id created.
-  ✔ PUT /units/:id created.
-  ✔ GET /users created.
-  ✔ GET /users/:id created.
-  ✔ POST /users created.
-  ✔ DELETE /users/:id created.
-  ✔ PUT /users/:id created.
+  ✔      GET  /attributes created.
+  ✔      GET  /attributes/:id created.
+  ✔     POST  /attributes created.
+  ✔   DELETE  /attributes/:id created.
+  ✔      PUT  /attributes/:id created.
+
+  ✔      GET  /devices/brands created.
+  ✔      GET  /devices/screensizes created.
+  ✔      GET  /devices created.
+  ✔      GET  /devices/:id created.
+  ✔     POST  /devices created.
+  ✔   DELETE  /devices/:id created.
+  ✔      PUT  /devices/:id created.
+
+  ✔      GET  /measurements created.
+  ✔      GET  /measurements/:id created.
+  ✔     POST  /measurements created.
+  ✔   DELETE  /measurements/:id created.
+  ✔      PUT  /measurements/:id created.
+
+  ✔      GET  /metrics created.
+  ✔      GET  /metrics/:id created.
+  ✔     POST  /metrics created.
+  ✔   DELETE  /metrics/:id created.
+  ✔      PUT  /metrics/:id created.
+
+  ✔      GET  /organizations/:id/attributes created.
+  ✔     POST  /organizations/:id/attributes created.
+  ✔   DELETE  /organizations/:id/attributes/:id2 created.
+  ✔      PUT  /organizations/:id/attributes/:id2 created.
+  ✔      GET  /organizations/:id/products created.
+  ✔     POST  /organizations/:id/products created.
+  ✔   DELETE  /organizations/:id/products/:id2 created.
+  ✔      GET  /organizations/:id/users created.
+  ✔     POST  /organizations/:id/users created.
+  ✔   DELETE  /organizations/:id/users/:id2 created.
+  ✔      GET  /organizations created.
+  ✔      GET  /organizations/:id created.
+  ✔     POST  /organizations created.
+  ✔   DELETE  /organizations/:id created.
+
+  ✔      GET  /permissions created.
+  ✔      GET  /permissions/:id created.
+  ✔     POST  /permissions created.
+  ✔   DELETE  /permissions/:id created.
+  ✔      PUT  /permissions/:id created.
+
+  ✔      GET  /products created.
+  ✔      GET  /products/:id created.
+  ✔     POST  /products created.
+  ✔   DELETE  /products/:id created.
+  ✔      PUT  /products/:id created.
+
+  ✔      GET  /units created.
+  ✔      GET  /units/:id created.
+  ✔     POST  /units created.
+  ✔   DELETE  /units/:id created.
+  ✔      PUT  /units/:id created.
+  
+  ✔      GET  /users/:id/attributes created.
+  ✔     POST  /users/:id/attributes created.
+  ✔   DELETE  /users/:id/attributes/:id2 created.
+  ✔      PUT  /users/:id/attributes/:id2 created.
+  ✔      GET  /users/:id/permissions created.
+  ✔     POST  /users/:id/permissions created.
+  ✔   DELETE  /users/:id/permissions/:id2 created.
+  ✔      GET  /users created.
+  ✔      GET  /users/:id created.
+  ✔     POST  /users created.
+  ✔   DELETE  /users/:id created.
 ```
 
 ```

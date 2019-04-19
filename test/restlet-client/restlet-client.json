@@ -5,7 +5,7 @@
     {
       "type": "Project",
       "id": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa",
-      "lastModified": "2019-04-19T16:04:10.758-03:00",
+      "lastModified": "2019-04-20T12:24:29.185-03:00",
       "name": "Kaleboo"
     },
     {
@@ -97,6 +97,49 @@
     {
       "type": "Request",
       "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.3",
+        "name": "POST"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_attribute\" : 1,\n  \"description\" : \"This is the new corporate name\"\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations/1/attributes"
+      },
+      "id": "848845e3-8b68-46d1-a342-7adf24fe542e",
+      "lastModified": "2019-04-20T11:37:36.909-03:00",
+      "name": "Create Organization Attribute",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
         "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
         "name": "DELETE"
       },
@@ -157,11 +200,47 @@
           "version": "V11"
         },
         "host": "localhost:8000",
-        "path": "/organizations/4"
+        "path": "/organizations/3"
       },
       "id": "29554908-928a-46b4-a870-0b1c692212f2",
-      "lastModified": "2019-04-19T16:04:10.759-03:00",
+      "lastModified": "2019-04-20T11:50:47.209-03:00",
       "name": "Delete Organization",
+      "headers": [],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.5",
+        "name": "DELETE"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"id_attribute\" : 1,\n  \"description\" : \"This is the new corporate name\"\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations/1/attributes/12"
+      },
+      "id": "901fb8c3-383f-4318-84b2-718af98493c4",
+      "lastModified": "2019-04-20T12:23:22.507-03:00",
+      "name": "Delete Organization Attribute",
       "headers": [],
       "metaInfo": {},
       "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
@@ -253,7 +332,7 @@
         },
         "bodyType": "Text",
         "autoSetLength": true,
-        "textBody": "{\n  \"id_metric\" : 3,\n  \"amount\" : 11.12\n}"
+        "textBody": "{\n  \"id_metric\" : 2,\n  \"amount\" : 11.12\n}"
       },
       "headersType": "Form",
       "uri": {
@@ -269,8 +348,51 @@
         "path": "/measurements/1"
       },
       "id": "db2b5bd3-7522-4f4c-9c7f-bfc723e9daff",
-      "lastModified": "2019-04-19T16:02:37.857-03:00",
+      "lastModified": "2019-04-20T11:52:50.953-03:00",
       "name": "Update Measurements (byId)",
+      "headers": [
+        {
+          "enabled": true,
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "metaInfo": {},
+      "parentId": "ed5283b5-99e1-4370-b561-cb7a0a5fd8aa"
+    },
+    {
+      "type": "Request",
+      "method": {
+        "requestBody": true,
+        "link": "http://tools.ietf.org/html/rfc7231#section-4.3.4",
+        "name": "PUT"
+      },
+      "body": {
+        "formBody": {
+          "overrideContentType": true,
+          "encoding": "application/x-www-form-urlencoded",
+          "items": []
+        },
+        "bodyType": "Text",
+        "autoSetLength": true,
+        "textBody": "{\n  \"description\" : \"This is another corporate name\"\n}"
+      },
+      "headersType": "Form",
+      "uri": {
+        "query": {
+          "delimiter": "&",
+          "items": []
+        },
+        "scheme": {
+          "name": "http",
+          "version": "V11"
+        },
+        "host": "localhost:8000",
+        "path": "/organizations/1/attributes/12"
+      },
+      "id": "95f5794c-b16b-474c-b2f5-0b4760ca8de1",
+      "lastModified": "2019-04-20T12:24:29.185-03:00",
+      "name": "Update Organization Attribute",
       "headers": [
         {
           "enabled": true,
