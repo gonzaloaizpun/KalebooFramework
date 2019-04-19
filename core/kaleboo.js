@@ -7,6 +7,7 @@ var asyncGet     = require('../async/get.js');
 var asyncPost    = require('../async/post.js');
 var asyncDelete  = require('../async/delete.js');
 var asyncPut     = require('../async/put.js');
+var asyncPostExtension = require('../async/postExtension.js');
 
 class Kaleboo
 {
@@ -46,7 +47,11 @@ class Kaleboo
                                 break;
 
                             case Route.http.post:
-                                express.post(route.url, kaleboo.postHandler(route, db_config));
+                                if (route.isByExtension()) {
+                                    express.post(route.url, kaleboo.postExtensionHandler(route, db_config));
+                                } else {
+                                    express.post(route.url, kaleboo.postHandler(route, db_config));
+                                }
                                 break;
 
                             case Route.http.put:
@@ -91,6 +96,21 @@ class Kaleboo
         return function(request, response, next) 
         {
             asyncPost(route, db_config, request, function(error, results) 
+            {
+                if (error != null) {
+                    response.status(404).json({ message : error.message });
+                } else {
+                    response.send(results);
+                }
+            });
+        };
+    }
+
+    postExtensionHandler(route, db_config)
+    {
+        return function(request, response, next) 
+        {
+            asyncPostExtension(route, db_config, request, function(error, results) 
             {
                 if (error != null) {
                     response.status(404).json({ message : error.message });
