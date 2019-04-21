@@ -3,6 +3,7 @@
 var Async = require('async');
 var mysql = require('mysql');
 var KalebooError = require('../utilities/error.js');
+var Table = require('../core/table.js');
 
 
 var main = function(route, db_config, request, callback) 
@@ -26,12 +27,8 @@ var main = function(route, db_config, request, callback)
 
 	// Modify the query when the request is looking for types instead of a model (ex. /users/roles)
 	// ==============================================
-	if (route.isByType()) 
-	{
-		let prefix = route.model.table.slice(0, -1);
-		let sufix  = route.url.substring(route.url.lastIndexOf('/') + 1);
-
-			query = `SELECT * FROM ${prefix}_${sufix}`;
+	if (route.isByType()) {
+		query = 'SELECT * FROM ' + Table.type(route.model.table, route.url);
 	}
 
 
@@ -39,10 +36,10 @@ var main = function(route, db_config, request, callback)
 	// ==============================================
 	if (route.isByExtension()) 
 	{
-		let prefix = route.model.table.slice(0, -1);
-		let sufix  = route.url.substring(route.url.lastIndexOf('/') + 1);
+		let table = Table.reverseExtension(route.model.table, route.url);
+		let key   = Table.idKey(route.model.table);
 
-			query = `SELECT * FROM ${prefix}_${sufix} WHERE id_${prefix} = ${id}`;
+			query = `SELECT * FROM ${table} WHERE ${key} = ${id}`;
 	}
 
 	// Get the main and basic data
@@ -119,8 +116,11 @@ var main = function(route, db_config, request, callback)
 
 		var hasOneFunction = function (relatedTable, route, db_config, item) 
 		{
-			let relationshipKey = 'id_' + relatedTable.slice(0, -1);
-			let attributeKey = relationshipKey.replace('id_' + route.model.table.slice(0, -1) + '_', '');
+			// scenario: requesting /silobags which have a relationship with the table silobag_types
+
+			let relationshipKey = Table.idKey(relatedTable);										// id_silobag_type
+			let attributeKey = relationshipKey.substring(relationshipKey.lastIndexOf('_') + 1);		// type
+
 			let idWhere = item[relationshipKey];
 			let keyWhere = 'id';
 
@@ -131,8 +131,11 @@ var main = function(route, db_config, request, callback)
 
 		var hasExternalFunction = function (relatedTable, route, db_config, item) 
 		{
-			let relationshipKey = 'id_' + relatedTable.slice(0, -1);
-			let attributeKey = relatedTable.slice(0, -1);
+			// scenario: requesting /measurements which have metrics, devices, units....
+
+			let relationshipKey = Table.idKey(relatedTable);	// id_metric
+			let attributeKey = Table.singular(relatedTable);	// metric
+
 			let idWhere = item[relationshipKey];
 			let keyWhere = 'id';
 
@@ -143,9 +146,11 @@ var main = function(route, db_config, request, callback)
 
 		var hasManyFunction = function (relatedTable, route, db_config, item)
 		{
-			let attributeKey = relatedTable.substring(relatedTable.indexOf("_") + 1);
+			// scenario: requestin /organizations/1 which have organization_attributes, organization_products...
+
+			let attributeKey = Table.extension(relatedTable);
 			let idWhere = item.id;
-			let keyWhere = 'id_' + relatedTable.substring(0, relatedTable.indexOf("_"));
+			let keyWhere = Table.idKey(route.model.table);
 
 			return Async.apply(extendedQuery, db_config, keyWhere, idWhere, relatedTable, attributeKey, false);
 		}

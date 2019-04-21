@@ -4,6 +4,7 @@ var Async = require('async');
 var mysql = require('mysql');
 var KalebooError = require('../utilities/error.js');
 var validateId = require('./validations/id.js');
+var Table = require('../core/table.js');
 
 
 var main = function(route, db_config, request, callback) 
@@ -15,18 +16,9 @@ var main = function(route, db_config, request, callback)
 		}
 
 		var table = route.model.table;
-		if (route.isByExtension()) 
-		{
-			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
-			let url = request.url.replace(`/${id}`, '');
-			//  "/organizations/1/attributes" to "organization"
-			let prefix = route.model.table.slice(0, -1);
-			//  "/organizations/1/attributes" to "attributes"
-			let sufix = url.substring(url.lastIndexOf("/") + 1);
-			// "organization_attributes"
-			table = `${prefix}_${sufix}`;
-		}
-		
+		if (route.isByExtension()) {
+			table = Table.reverseExtension(route.model.table, request.url, id);
+		}	
 
 		mysql.createConnection(db_config).query(makeQuery(table, request.body, id), function(error, results) 
 		{
@@ -34,8 +26,8 @@ var main = function(route, db_config, request, callback)
 				return end(callback, error, results);
 			} else {
 				var result = {
-					message : `item ${results.insertId} updated in ${table}`,
-					     id : results.insertId,
+					message : `item ${id} updated in ${table}`,
+					     id : id,
 					  table : table
 				}
 				return end(callback, null, result);

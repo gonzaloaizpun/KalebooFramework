@@ -4,6 +4,7 @@ var Async = require('async');
 var mysql = require('mysql');
 var KalebooError = require('../utilities/error.js');
 var validateId = require('./validations/id.js');
+var Table = require('../core/table.js');
 
 
 var main = function(route, db_config, request, callback) 
@@ -14,15 +15,12 @@ var main = function(route, db_config, request, callback)
 			return end(callback, error, null);
 		}
 
-		var prefix = route.model.table.slice(0, -1);
-		var sufix = request.url.substring(request.url.lastIndexOf("/") + 1);
+		var table = Table.reverseExtension(route.model.table, request.url);
+		var key = 'id_' + Table.singular(route.model.table);
 
 		// data is composed by request.body + the relationship (request query param)
 		var data = request.body;
-			data[`id_${prefix}`] = id;
-
-		// table is a child of this route...
-		var table = `${prefix}_${sufix}`;
+			data[key] = id;
 		
 
 		mysql.createConnection(db_config).query(makeQuery(table, data), function(error, results) 

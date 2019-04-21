@@ -3,6 +3,7 @@
 var Async 	 = require('async');
 var Database = require('../utilities/database.js');
 var mysql 	 = null;
+var Table 	 = require('./table.js');
 
 
 class Model
@@ -113,9 +114,10 @@ class Model
 	children(table, tables, callback) 
 	{
 	    // We know Model children start with the following prefix: (ex. 'user_')
-	    let prefix = table.slice(0, -1) + '_';
+	    let prefix = Table.singular(table) + '_';
 
 	    var children = [];
+
 	    tables.forEach(function(candidate) 
 	    {
 	    	if (candidate.includes(prefix)) {
@@ -130,7 +132,8 @@ class Model
 	// thoses tables that starts with table_ (ex. 'user_attributes')
 	extensions(model, db_config, table, children, callback)
 	{
-	    var id = 'id_' + table.slice(0, -1);
+	    var id = 'id_' + Table.singular(table);
+
 	    var functions = [model.init];
 
 	    // Add each Async Function
@@ -175,13 +178,14 @@ class Model
 
 	    	mysql.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
 	    	{
-	    		var myId = table.slice(0, -1);
+	    		var myId = Table.singular(table);
+
 	    		var hasOne = [];
 	    		
 	    		fields.forEach(function(field) 
 	    		{
 	    			if (field.name.includes("id_") && !field.name.includes(myId)) {
-	    				let model = field.name.slice(3) + 's'; 	// going to plural, 'id_role' > 'roles'
+	    				let model = Table.plural(field.name.slice(3)); 	// 'id_role' > 'roles'
 	    				hasOne.push(model);	
 	    			}
 	    		});
