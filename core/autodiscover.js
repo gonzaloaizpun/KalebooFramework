@@ -6,15 +6,12 @@ var Tables    = require('./tables.js');
 var Model     = require('./model.js');
 var Routes    = require('./routes.js');
 
-var Database  = require('../utilities/database.js');
-
 class Autodiscover
 {
-	constructor(db_config, logger) 
+	constructor(database, logger) 
 	{
-		this.mysql  = new Database(db_config);
-		this.tables = new Tables(db_config);
-		this.db_config = db_config;
+		this.database  = database;
+		this.tables = new Tables(database);
 		this.logger = logger;
 		this.logger.hello();
 	}
@@ -65,7 +62,7 @@ class Autodiscover
 				if (!table.includes("_")) 
 				{
 					// Enqueue Model class in order to be discovered
-					functions.push(Async.apply(autodiscover.model, table, results.tables, autodiscover.db_config, autodiscover.logger));
+					functions.push(Async.apply(autodiscover.model, table, results.tables, autodiscover.database, autodiscover.logger));
 				}
 			});
 
@@ -76,11 +73,11 @@ class Autodiscover
 		});
 	}
 
-		model(table, tables, db_config, logger, queue, callback) 
+		model(table, tables, database, logger, queue, callback) 
 		{
 			let model = new Model();
 
-				model.make(table, tables, db_config, logger, function (error, results) {
+				model.make(table, tables, database, logger, function (error, results) {
 					queue.push(results);
 					callback(null, queue);
 				});

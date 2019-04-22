@@ -6,7 +6,7 @@ var KalebooError = require('../utilities/error.js');
 var Table = require('../core/table.js');
 
 
-var main = function(route, db_config, request, callback) 
+var main = function(route, database, request, callback) 
 {
 	let id = request.params.id || 0;
 
@@ -44,7 +44,7 @@ var main = function(route, db_config, request, callback)
 
 	// Get the main and basic data
 	// ==============================================
-	mysql.createConnection(db_config).query(query, function(error, results) 
+	database.query(query, function(error, results) 
 	{
 		// Exit if there is not any kind of relationship
 		// ==============================================
@@ -58,9 +58,9 @@ var main = function(route, db_config, request, callback)
 
 		// Getting by id
 		if (route.isByListing()) {
-			return listFunction(results, db_config, route, callback);
+			return listFunction(results, database, route, callback);
 		} else if (route.isById()) {
-			return classFunction(results[0], db_config, route, callback);
+			return classFunction(results[0], database, route, callback);
 		} else {
 			return end(callback, error, results);
 		}
@@ -68,11 +68,11 @@ var main = function(route, db_config, request, callback)
 	});
 }
 
-	var listFunction = function(results, db_config, route, callback) 
+	var listFunction = function(results, database, route, callback) 
 	{
 	    var functions = [];
 	    for (var i = 0; i < results.length; i++) {
-	        functions.push(Async.apply(classFunction, results[i], db_config, route));
+	        functions.push(Async.apply(classFunction, results[i], database, route));
 	    }
 
 	    Async.parallel(functions, function(error, results) {
@@ -80,7 +80,7 @@ var main = function(route, db_config, request, callback)
 	    });
 	}
 
-	var classFunction = function(item, db_config, route, callback)
+	var classFunction = function(item, database, route, callback)
 	{
 		// Init functions to be executed by Async
 		// ==============================================
@@ -90,7 +90,7 @@ var main = function(route, db_config, request, callback)
 		// ==============================================
 		if (route.model.hasOne.length > 0) {
 			for (var i = 0; i < route.model.hasOne.length; i++) {
-				functions.push(hasOneFunction(route.model.hasOne[i], route, db_config, item));
+				functions.push(hasOneFunction(route.model.hasOne[i], route, database, item));
 			}
 		}
 
@@ -98,7 +98,7 @@ var main = function(route, db_config, request, callback)
 		// ==============================================
 		if (route.model.hasMany.length > 0) {
 			for (var i = 0; i < route.model.hasMany.length; i++) {
-				functions.push(hasManyFunction(route.model.hasMany[i], route, db_config, item));
+				functions.push(hasManyFunction(route.model.hasMany[i], route, database, item));
 			}
 		}
 
@@ -106,7 +106,7 @@ var main = function(route, db_config, request, callback)
 		// ==============================================
 		if (route.model.hasExternal.length > 0) {
 			for (var i = 0; i < route.model.hasExternal.length; i++) {
-				functions.push(hasExternalFunction(route.model.hasExternal[i], route, db_config, item));
+				functions.push(hasExternalFunction(route.model.hasExternal[i], route, database, item));
 			}
 		}
 
@@ -114,7 +114,7 @@ var main = function(route, db_config, request, callback)
 	}
 
 
-		var hasOneFunction = function (relatedTable, route, db_config, item) 
+		var hasOneFunction = function (relatedTable, route, database, item) 
 		{
 			// scenario: requesting /silobags which have a relationship with the table silobag_types
 
@@ -126,10 +126,10 @@ var main = function(route, db_config, request, callback)
 
 			delete item[relationshipKey];
 
-			return Async.apply(query, db_config, keyWhere, idWhere, relatedTable, attributeKey, true);
+			return Async.apply(query, database, keyWhere, idWhere, relatedTable, attributeKey, true);
 		}
 
-		var hasExternalFunction = function (relatedTable, route, db_config, item) 
+		var hasExternalFunction = function (relatedTable, route, database, item) 
 		{
 			// scenario: requesting /measurements which have metrics, devices, units....
 
@@ -141,10 +141,10 @@ var main = function(route, db_config, request, callback)
 
 			delete item[relationshipKey];
 
-			return Async.apply(query, db_config, keyWhere, idWhere, relatedTable, attributeKey, true);
+			return Async.apply(query, database, keyWhere, idWhere, relatedTable, attributeKey, true);
 		}
 
-		var hasManyFunction = function (relatedTable, route, db_config, item)
+		var hasManyFunction = function (relatedTable, route, database, item)
 		{
 			// scenario: requestin /organizations/1 which have organization_attributes, organization_products...
 
@@ -152,14 +152,14 @@ var main = function(route, db_config, request, callback)
 			let idWhere = item.id;
 			let keyWhere = Table.idKey(route.model.table);
 
-			return Async.apply(extendedQuery, db_config, keyWhere, idWhere, relatedTable, attributeKey, false);
+			return Async.apply(extendedQuery, database, keyWhere, idWhere, relatedTable, attributeKey, false);
 		}
 
-			var query = function(db_config, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
+			var query = function(database, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
 			{
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
-				mysql.createConnection(db_config).query(query, function(error, results) {
+				database.query(query, function(error, results) {
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {
@@ -169,11 +169,11 @@ var main = function(route, db_config, request, callback)
 				});
 			}
 
-			var extendedQuery = function(db_config, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
+			var extendedQuery = function(database, keyWhere, idWhere, table, attributeKey, onlyOneItem, queue, callback)
 			{
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
-				mysql.createConnection(db_config).query(query, function(error, results) {
+				database.query(query, function(error, results) {
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {

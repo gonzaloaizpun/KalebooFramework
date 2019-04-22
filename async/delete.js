@@ -6,7 +6,7 @@ var KalebooError = require('../utilities/error.js');
 var validateId = require('./validations/id.js');
 
 
-var main = function(route, db_config, request, callback) 
+var main = function(route, database, request, callback) 
 {
 
 	validateId(request, function(error, id) 
@@ -29,7 +29,7 @@ var main = function(route, db_config, request, callback)
 			table = `${prefix}_${sufix}`;
 		}
 
-		mysql.createConnection(db_config).query(makeQuery(table, route.model.deleteByDisable, id), function(error, results) 
+		database.query(makeQuery(table, route.model.deleteByDisable, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);

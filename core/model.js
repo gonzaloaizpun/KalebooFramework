@@ -1,8 +1,6 @@
 "use strict";
 
 var Async 	 = require('async');
-var Database = require('../utilities/database.js');
-var mysql 	 = null;
 var Table 	 = require('./table.js');
 
 
@@ -10,7 +8,7 @@ class Model
 {
 	constructor() 
 	{
-		this.db_config = null;
+		this.database = null;
 		this.hasOne = null;
 		this.hasMany = null;
 		this.hasExternal = null;
@@ -21,8 +19,10 @@ class Model
 		this.isEditable = false;
 	}
 
-	make(table, tables, db_config, logger, callback) 
+	make(table, tables, database, logger, callback) 
 	{
+		this.database = database;
+		
 		// Hello, I am a model
 		var model = this;
 
@@ -31,24 +31,24 @@ class Model
 		var hasMany  = [];
 		var hasExternal = [];
 
-		model.attributes(table, db_config, function(error, attributes) 
+		model.attributes(table, database, function(error, attributes) 
 		{
 			// get the children: this will find all related tables (ex. 'users' > ['user_attributes'])
 			model.children(table, tables, function(error, children) 
 			{
 				// get extensions: this will understand if each related table is 1:1 or 1:N extension
-			    model.extensions(model, db_config, table, children, function(error, results) 
+			    model.extensions(model, database, table, children, function(error, results) 
 			    {
 			    	hasOne  = results.hasOne;
 			    	hasMany = results.hasMany;
 
 			    	// get relationships: this will get 1:1 external relationships (ex. 'users' > ['roles'])
-			    	model.relationships(db_config, table, function(error, items) 
+			    	model.relationships(database, table, function(error, items) 
 			    	{
 			    		hasExternal = items;
 
 			    		// Finally
-						model.db_config = db_config;
+						model.database = database;
 						model.hasOne = hasOne;
 						model.hasMany = hasMany;
 						model.hasExternal = hasExternal;
@@ -73,42 +73,40 @@ class Model
 		}); // end attributes
 	}
 
-	attributes(table, db_config, callback)
+	attributes(table, database, callback)
 	{
-		var mysql = new Database(db_config);
+    	database.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
+    	{
+    		var blacklist = ['id', 'created_at', 'updated_at', 'active'];
+    		var list = [];
+    		var deleteByDisable = false;
+    		var isEditable = false;
 
-	    	mysql.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
-	    	{
-	    		var blacklist = ['id', 'created_at', 'updated_at', 'active'];
-	    		var list = [];
-	    		var deleteByDisable = false;
-	    		var isEditable = false;
+    		fields.forEach(function(field) 
+    		{
+    			// adding those not in blacklist
+    			if (blacklist.indexOf(field.name) == -1) 
+    			{
+    				// Add
+    				list.push(field.name);
 
-	    		fields.forEach(function(field) 
-	    		{
-	    			// adding those not in blacklist
-	    			if (blacklist.indexOf(field.name) == -1) 
-	    			{
-	    				// Add
-	    				list.push(field.name);
-
-		    			// Checking if is it an editable attribute
-		    			// ref. https://dev.mysql.com/doc/internals/en/myisam-column-attributes.html
-		    			if (field.type == 253 || field.type == 15 || field.type == 246) {
-		    				isEditable = true;
-		    			} else if (field.type == 3 && field.name.indexOf('id_') == -1) {
-		    				isEditable = true;
-		    			}
+	    			// Checking if is it an editable attribute
+	    			// ref. https://dev.mysql.com/doc/internals/en/myisam-column-attributes.html
+	    			if (field.type == 253 || field.type == 15 || field.type == 246) {
+	    				isEditable = true;
+	    			} else if (field.type == 3 && field.name.indexOf('id_') == -1) {
+	    				isEditable = true;
 	    			}
+    			}
 
-	    			// checking if 'active' attribute exists. In that case, deletion method will be by boolean.
-	    			if (field.name == 'active') {
-	    				deleteByDisable = true;
-	    			}
-	    		});
+    			// checking if 'active' attribute exists. In that case, deletion method will be by boolean.
+    			if (field.name == 'active') {
+    				deleteByDisable = true;
+    			}
+    		});
 
-	    		callback(null, { list: list, deleteByDisable: deleteByDisable, isEditable: isEditable });
-	    	});
+    		callback(null, { list: list, deleteByDisable: deleteByDisable, isEditable: isEditable });
+    	});
 	}
 
 	children(table, tables, callback) 
@@ -130,7 +128,7 @@ class Model
 
 
 	// thoses tables that starts with table_ (ex. 'user_attributes')
-	extensions(model, db_config, table, children, callback)
+	extensions(model, database, table, children, callback)
 	{
 	    var id = 'id_' + Table.singular(table);
 
@@ -138,7 +136,7 @@ class Model
 
 	    // Add each Async Function
 	    children.forEach(function(child) {
-	    	functions.push(Async.apply(model.fields, db_config, child, id));
+	    	functions.push(Async.apply(model.fields, database, child, id));
 	    });
 
 	    // Execute Async
@@ -148,50 +146,46 @@ class Model
 	}
 
 
-		fields(db_config, child, id, queue, callback)
+		fields(database, child, id, queue, callback)
 		{
-			var mysql = new Database(db_config);
-
-		    	mysql.query(`SELECT * FROM ${child} LIMIT 1`, function(error, results, fields) 
-		    	{
-		    		var idFound = false;
-		    		fields.forEach(function(field) {
-		    			if (field.name == id) {
-		    				idFound = true;
-		    			}
-		    		});
-
-		    		if (idFound) {
-						queue.hasMany.push(child);
-		    			return callback(null, queue);
-		    		} else {
-					    queue.hasOne.push(child);
-						return callback(null, queue);
-		    		}
-		    	});
-		}
-
-	// those tables which contains "id_" relationships (ex. 'users' has 'id_role')
-	relationships(db_config, table, callback)
-	{
-		var mysql = new Database(db_config);
-
-	    	mysql.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
+	    	database.query(`SELECT * FROM ${child} LIMIT 1`, function(error, results, fields) 
 	    	{
-	    		var myId = Table.singular(table);
-
-	    		var hasOne = [];
-	    		
-	    		fields.forEach(function(field) 
-	    		{
-	    			if (field.name.includes("id_") && !field.name.includes(myId)) {
-	    				let model = Table.plural(field.name.slice(3)); 	// 'id_role' > 'roles'
-	    				hasOne.push(model);	
+	    		var idFound = false;
+	    		fields.forEach(function(field) {
+	    			if (field.name == id) {
+	    				idFound = true;
 	    			}
 	    		});
 
-				return callback(null, hasOne);
+	    		if (idFound) {
+					queue.hasMany.push(child);
+	    			return callback(null, queue);
+	    		} else {
+				    queue.hasOne.push(child);
+					return callback(null, queue);
+	    		}
 	    	});
+		}
+
+	// those tables which contains "id_" relationships (ex. 'users' has 'id_role')
+	relationships(database, table, callback)
+	{
+    	database.query(`SELECT * FROM ${table} LIMIT 1`, function(error, results, fields) 
+    	{
+    		var myId = Table.singular(table);
+
+    		var hasOne = [];
+    		
+    		fields.forEach(function(field) 
+    		{
+    			if (field.name.includes("id_") && !field.name.includes(myId)) {
+    				let model = Table.plural(field.name.slice(3)); 	// 'id_role' > 'roles'
+    				hasOne.push(model);	
+    			}
+    		});
+
+			return callback(null, hasOne);
+    	});
 	}
 
 	init(callback) {

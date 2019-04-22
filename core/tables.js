@@ -1,15 +1,13 @@
 "use strict";
 
-var Async 	 = require('async');
-var Database = require('../utilities/database.js');
-
-var mysql 	 = null;
+var Async = require('async');
+var mysql = null;
 
 
 class Tables
 {
-	constructor(db_config) {
-		mysql = new Database(db_config);
+	constructor(database) {
+		mysql = database;
 	}
 
 	list(callback) 

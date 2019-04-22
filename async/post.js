@@ -6,7 +6,7 @@ var KalebooError = require('../utilities/error.js');
 var validateInputs = require('./validations/inputs.js');
 
 
-var main = function(route, db_config, request, callback) 
+var main = function(route, database, request, callback) 
 {
     validateInputs(route, request.body, true, function(error, results)
     {
@@ -14,7 +14,7 @@ var main = function(route, db_config, request, callback)
     		return end(callback, error, null);
     	}
 
-		mysql.createConnection(db_config).query(makeQuery(route, request.body), function(error, results) 
+		database.query(makeQuery(route, request.body), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);

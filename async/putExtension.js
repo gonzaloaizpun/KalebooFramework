@@ -7,7 +7,7 @@ var validateId = require('./validations/id.js');
 var Table = require('../core/table.js');
 
 
-var main = function(route, db_config, request, callback) 
+var main = function(route, database, request, callback) 
 {
 	validateId(request, function(error, id) 
 	{
@@ -20,7 +20,7 @@ var main = function(route, db_config, request, callback)
 			table = Table.reverseExtension(route.model.table, request.url, id);
 		}	
 
-		mysql.createConnection(db_config).query(makeQuery(table, request.body, id), function(error, results) 
+		database.query(makeQuery(table, request.body, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);
