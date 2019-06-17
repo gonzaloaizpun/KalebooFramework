@@ -20,7 +20,7 @@ var main = function(route, database, request, callback)
 		if (route.isByExtension()) 
 		{
 			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
-			let url = request.url.replace(`/${id}`, '');
+			let url = request.url.replace(new RegExp(`/${id}$`), '');
 			//  "/organizations/1/attributes" to "organization"
 			let prefix = route.model.table.slice(0, -1);
 			//  "/organizations/1/attributes" to "attributes"
