@@ -32,7 +32,7 @@ class Table
 		//  from: `/organizations/1/attributes/10` 	to: `organization_attributes`
 		// ==============================================
 		let prefix = this.singular(model);						// 'organizations' to 'organization'
-		url = url.replace(`/${id}`, '');						// '/organizations/1/attributes/10' to '/organizations/1/attributes'
+		url = url.replace(new RegExp(`/${id}$`), '');			// '/organizations/1/attributes/10' to '/organizations/1/attributes'
 		let sufix = url.substring(url.lastIndexOf("/") + 1);	// '/organizations/1/attributes' to 'attributes'
 		return `${prefix}_${sufix}`;
 	}
