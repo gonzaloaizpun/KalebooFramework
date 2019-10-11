@@ -160,6 +160,11 @@ var main = function(route, database, request, callback)
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
 				database.query(query, function(error, results) {
+
+					if (error) {
+						return end(callback, new KalebooError(`Mmm... it looks like "${query}" has a problem`), null);
+					}
+
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {
@@ -174,6 +179,11 @@ var main = function(route, database, request, callback)
 				let query = `SELECT * FROM ${table} WHERE ${keyWhere} = ${idWhere}`;
 
 				database.query(query, function(error, results) {
+
+					if (error) {
+						return end(callback, new KalebooError(`Mmm... it looks like "${query}" has a problem`), null);
+					}
+
 					if (onlyOneItem) {
 						queue[attributeKey] = results[0];
 					} else {
