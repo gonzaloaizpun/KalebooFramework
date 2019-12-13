@@ -16,6 +16,7 @@ var main = function(route, database, request, callback)
 		}
 
 		var table = route.model.table;
+		var force = request.query && request.query.force === 'true' ? true : false;
 
 		if (route.isByExtension()) 
 		{
@@ -29,7 +30,7 @@ var main = function(route, database, request, callback)
 			table = `${prefix}_${sufix}`;
 		}
 
-		database.query(makeQuery(table, route.model.deleteByDisable, id), function(error, results) 
+		database.query(makeQuery(table, force ? false : forceroute.model.deleteByDisable, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);
