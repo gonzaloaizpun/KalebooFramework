@@ -16,12 +16,12 @@ var main = function(route, database, request, callback)
 		}
 
 		var table = route.model.table;
-		var force = request.query && request.query.force === 'true' ? true : false;
+		var force = request.query && request.query.force === 'true';
 
 		if (route.isByExtension()) 
 		{
 			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
-			let url = request.url.replace(new RegExp(`/${id}$`), '');
+			let url = request.path.replace(new RegExp(`/${id}$`), '');
 			//  "/organizations/1/attributes" to "organization"
 			let prefix = route.model.table.slice(0, -1);
 			//  "/organizations/1/attributes" to "attributes"
@@ -30,7 +30,7 @@ var main = function(route, database, request, callback)
 			table = `${prefix}_${sufix}`;
 		}
 
-		database.query(makeQuery(table, force ? false : forceroute.model.deleteByDisable, id), function(error, results) 
+		database.query(makeQuery(table, force ? false : route.model.deleteByDisable, id), function(error, results) 
 		{
 			if (error) {
 				return end(callback, error, results);
