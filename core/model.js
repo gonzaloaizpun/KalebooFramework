@@ -92,11 +92,9 @@ class Model
 
 	    			// Checking if is it an editable attribute
 	    			// ref. https://dev.mysql.com/doc/internals/en/myisam-column-attributes.html
-	    			if (field.type == 253 || field.type == 15 || field.type == 246) {
-	    				isEditable = true;
-	    			} else if (field.type == 3 && field.name.indexOf('id_') == -1) {
-	    				isEditable = true;
-	    			}
+	    			if (field.type == 253 || field.type == 15 || field.type == 246 || field.type == 3) {
+                        isEditable = true;
+                    }
     			}
 
     			// checking if 'active' attribute exists. In that case, deletion method will be by boolean.
