@@ -2,6 +2,7 @@
 
 var Async = require('async');
 var mysql = require('mysql');
+var Table = require('../core/table.js');
 var KalebooError = require('../utilities/error.js');
 var validateId = require('./validations/id.js');
 
@@ -23,7 +24,7 @@ var main = function(route, database, request, callback)
 			//  "/organizations/1/attributes/10" to "/organizations/1/attributes"
 			let url = request.path.replace(new RegExp(`/${id}$`), '');
 			//  "/organizations/1/attributes" to "organization"
-			let prefix = route.model.table.slice(0, -1);
+			let prefix = Table.singular(route.model.table);
 			//  "/organizations/1/attributes" to "attributes"
 			let sufix = url.substring(url.lastIndexOf("/") + 1);
 			// "organization_attributes"
